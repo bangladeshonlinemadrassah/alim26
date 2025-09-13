@@ -8,28 +8,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1e40af;
-      --secondary: #10b981;
-      --accent: #8b5cf6;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --dark: #0f172a;
-      --darker: #0a0e1a;
-      --light: #f1f5f9;
-      --text: #e2e8f0;
-      --text-muted: #94a3b8;
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --glass: rgba(15, 23, 42, 0.6);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --gradient-primary: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
-      --gradient-secondary: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-      --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-      --radius: 12px;
-      --transition: all 0.3s ease;
+      --primary: #1e3a8a; /* Deep sapphire blue */
+      --primary-dark: #172554; /* Darker sapphire for depth */
+      --secondary: #059669; /* Rich emerald green */
+      --accent: #7c3aed; /* Vibrant amethyst purple */
+      --danger: #dc2626; /* Bright red for errors */
+      --warning: #d97706; /* Amber for warnings */
+      --dark: #0a0f1f; /* Slightly lighter dark with metallic undertone */
+      --darker: #060914; /* Deepest background for contrast */
+      --light: #f8fafc; /* Crisp white for highlights */
+      --text: #e5e7eb; /* Silver-toned white for text */
+      --text-muted: #9ca3af; /* Softer gray for muted text */
+      --card-bg: rgba(20, 30, 60, 0.75); /* Frosted glass with deeper tone */
+      --card-border: rgba(255, 255, 255, 0.12); /* Subtle silver border */
+      --glass: rgba(10, 15, 30, 0.65); /* Enhanced frosted glass */
+      --glass-border: rgba(255, 255, 255, 0.15); /* Slightly brighter glass border */
+      --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #059669 50%, #facc15 100%); /* Sapphire to emerald with gold accent */
+      --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #db2777 50%, #f59e0b 100%); /* Amethyst to rose with amber */
+      --shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.15); /* Softer shadow for depth */
+      --shadow-md: 0 12px 20px -4px rgba(0, 0, 0, 0.25); /* Enhanced for premium feel */
+      --shadow-lg: 0 24px 30px -6px rgba(0, 0, 0, 0.35); /* Dramatic shadow for cards */
+      --shadow-xl: 0 30px 40px -8px rgba(0, 0, 0, 0.45); /* More premium shadow */
+      --radius: 14px; /* Slightly larger radius for smoother edges */
+      --transition: all 0.4s ease; /* Smoother transitions */
     }
 
     * {
@@ -112,6 +113,7 @@
       border-radius: 20px;
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
     }
 
     .searchbar {
@@ -134,6 +136,7 @@
       transition: var(--transition);
       backdrop-filter: blur(10px);
       font-size: 0.95rem;
+      box-shadow: var(--shadow-sm);
     }
 
     .searchbar input:focus {
@@ -156,7 +159,7 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       backdrop-filter: blur(15px);
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-xl); /* Enhanced shadow */
       position: relative;
       overflow: hidden;
     }
@@ -181,6 +184,7 @@
       background-clip: text;
       color: transparent;
       font-weight: 800;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .hero p {
@@ -209,6 +213,7 @@
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      box-shadow: var(--shadow-md); /* Enhanced shadow */
     }
 
     .stat-card::before {
@@ -222,8 +227,8 @@
     }
 
     .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-5px) scale(1.02); /* Added scale for premium feel */
+      box-shadow: var(--shadow-xl);
     }
 
     .stat-number {
@@ -235,6 +240,7 @@
       color: transparent;
       margin-bottom: 10px;
       line-height: 1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .stat-label {
@@ -250,7 +256,7 @@
       background: var(--card-bg);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-md); /* Enhanced shadow */
       font-size: 0.85rem;
     }
 
@@ -274,6 +280,7 @@
 
     .today-classes-table tr:hover {
       background: rgba(255, 255, 255, 0.05);
+      transform: scale(1.01); /* Subtle scale on hover */
     }
 
     .subject-badge {
@@ -284,6 +291,7 @@
       color: white;
       font-size: 0.75rem;
       font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .class-info {
@@ -305,7 +313,7 @@
       padding: 20px;
       backdrop-filter: blur(12px);
       transition: var(--transition);
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-md); /* Enhanced shadow */
       position: relative;
       overflow: hidden;
       font-size: 0.9rem;
@@ -317,14 +325,15 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      height: 2px; /* Slightly thicker */
+      background: var(--gradient-primary);
+      opacity: 0.8;
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) scale(1.02); /* Added scale for premium feel */
       border-color: var(--primary);
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-xl);
     }
 
     .subject {
@@ -414,7 +423,7 @@
       gap: 12px;
       transition: var(--transition);
       backdrop-filter: blur(10px);
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-md); /* Enhanced shadow */
       position: relative;
       overflow: hidden;
       font-size: 0.9rem;
@@ -433,9 +442,9 @@
     }
 
     .pill:hover {
-      transform: translateY(-3px);
+      transform: translateY(-3px) scale(1.02); /* Added scale */
       border-color: var(--primary);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-xl);
     }
 
     .pill:hover::before {
@@ -459,38 +468,29 @@
     .owner-wrap {
       max-width: 980px;
       margin: 28px auto 12px;
-      padding: 18px 20px;
-      border-radius: 14px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.04);
+      padding: 20px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
       flex-direction: column;
       gap: 12px;
       align-items: center;
       text-align: center;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-md); /* Enhanced shadow */
     }
 
     .owner-messages {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      font-size: 12px;
-      letter-spacing: 0.6px;
-      color: rgba(226,232,240,0.75);
-      text-transform: lowercase;
+      display: none;
     }
 
-    .owner-messages .msg {
-      background: rgba(255,255,255,0.02);
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.03);
-      font-style: italic;
-      font-weight: 500;
-      min-width: auto;
+    .owner-intro {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 10px;
     }
 
     .owner-name {
@@ -519,21 +519,24 @@
       gap: 8px;
       align-items: center;
       font-size: 12px;
-      color: rgba(226,232,240,0.85);
+      color: var(--text);
       text-transform: none;
       font-weight: 600;
     }
 
-    .designer-credit .designer-name {
+    .designer-name {
       font-weight: 900;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
-      background: linear-gradient(90deg, #2563eb, #8b5cf6);
+      background: var(--gradient-primary); /* Updated to match button gradient */
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-left: 6px;
-      font-size: 12px;
+      font-size: 13px;
+      position: relative;
+      padding: 4px 8px;
+      border-radius: 8px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
     }
 
     .site-footer {
@@ -546,12 +549,14 @@
       color: rgba(226,232,240,0.75);
       text-align: center;
       font-size: 13px;
+      box-shadow: var(--shadow-sm);
     }
 
     @media (max-width: 768px) {
       .owner-name { font-size: 1.05rem; }
       .owner-messages { font-size: 11px; gap: 8px; }
       .designer-credit { font-size: 11px; }
+      .owner-intro { font-size: 0.85rem; }
 
       .today-classes-table {
         font-size: 0.75rem;
@@ -582,12 +587,14 @@
       border: 1px solid var(--card-border);
       backdrop-filter: blur(10px);
       font-size: 0.9rem;
+      box-shadow: var(--shadow-sm);
     }
 
     .back-button:hover {
       background: rgba(37, 99, 235, 0.1);
       transform: translateX(-3px);
       border-color: var(--primary);
+      box-shadow: var(--shadow-md);
     }
 
     .section-title {
@@ -617,6 +624,7 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .empty-state {
@@ -787,10 +795,10 @@
       z-index: -1;
       border-radius: inherit;
       background: var(--gradient-primary);
-      background-size: 400% 400%;
-      animation: gradientGlow 3s ease infinite;
-      filter: blur(10px);
-      opacity: 0.4;
+      background-size: 500% 500%;
+      animation: gradientGlow 4s ease infinite;
+      filter: blur(12px);
+      opacity: 0.5;
     }
 
     @keyframes gradientGlow {
@@ -830,6 +838,7 @@
       backdrop-filter: blur(10px);
       min-width: 180px;
       font-size: 0.9rem;
+      box-shadow: var(--shadow-sm);
     }
 
     .filter-bar input:focus, .filter-bar select:focus {
@@ -870,7 +879,7 @@
       border-radius: 16px;
       padding: 30px;
       backdrop-filter: blur(12px);
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-xl); /* Enhanced shadow */
       position: relative;
       overflow: hidden;
     }
@@ -899,6 +908,7 @@
       background-clip: text;
       color: transparent;
       font-weight: 800;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .welcome-message p {
@@ -931,6 +941,7 @@
       outline: none;
       transition: var(--transition);
       font-size: 1rem;
+      box-shadow: var(--shadow-sm);
     }
 
     .form-group input:focus {
@@ -981,6 +992,7 @@
       text-decoration: none;
       font-weight: 600;
       transition: var(--transition);
+      box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
     }
 
     .whatsapp-link:hover {
@@ -1025,8 +1037,7 @@
       max-width: 500px;
       width: 90%;
       backdrop-filter: blur(15px);
-      box-shadow: var(--shadow-lg);
-      position: relative;
+      box-shadow: var(--shadow-xl); /* Enhanced shadow */
     }
 
     .modal-header {
@@ -1041,6 +1052,7 @@
       background-clip: text;
       color: transparent;
       margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .modal-body {
@@ -1140,7 +1152,6 @@
         <h1 class="bangla-font">ALIM-26 "Final Stage Preparation Course"</h1>
         <p class="bangla-font">শিক্ষার যাত্রায় এক নতুন দিগন্ত। বাংলাদেশ অনলাইন মাদ্রাসা (BOM) এর প্রাইভেট ব্যাচের দাখিল-২৬ শিক্ষার্থীদের জন্য প্রিমিয়াম লার্নিং এক্সপেরিয়েন্স</p>
       </div>
-      <!-- Note: Stat values are hardcoded and not linked to API data -->
       <div class="stats">
         <div class="stat-card fade-in">
           <div class="stat-number">31</div>
@@ -1224,6 +1235,7 @@
         <span class="msg">leading the roadmap</span>
         <span class="msg">for topper success</span>
       </div>
+      <p class="owner-intro bangla-font">বাংলাদেশ অনলাইন মাদ্রাসা (BOM) এর প্রতিষ্ঠাতা এবং দূরদর্শী নেতা, যিনি শিক্ষার্থীদের উৎকর্ষের পথে পরিচালিত করছেন।</p>
       <div class="owner-name bangla-font">MD. RIAD HASAN<span style="font-weight:600; font-size:0.86rem; color:rgba(226,232,240,0.85); margin-left:8px;">(CEO & Founder)</span></div>
       <div class="owner-sub">building brighter paths for ambitious learners</div>
       <div class="designer-credit">
@@ -1259,6 +1271,7 @@
         <span class="msg">leading the roadmap</span>
         <span class="msg">for topper success</span>
       </div>
+      <p class="owner-intro bangla-font">বাংলাদেশ অনলাইন মাদ্রাসা (BOM) এর প্রতিষ্ঠাতা এবং দূরদর্শী নেতা, যিনি শিক্ষার্থীদের উৎকর্ষের পথে পরিচালিত করছেন।</p>
       <div class="owner-name bangla-font">MD. RIAD HASAN<span style="font-weight:600; font-size:0.86rem; color:rgba(226,232,240,0.85); margin-left:8px;">(CEO & Founder)</span></div>
       <div class="owner-sub">building brighter paths for ambitious learners</div>
       <div class="designer-credit">
@@ -1656,209 +1669,143 @@
 
       let tableHTML = '';
       todayClasses.forEach(cls => {
-        if (!cls) return;
         tableHTML += `
           <tr>
             <td><span class="subject-badge bangla-font">${cls.subject}</span></td>
-            <td class="class-info bangla-font">${cls.title}</td>
-            <td class="bangla-font">${cls.time}</td>
+            <td><span class="class-info bangla-font">${cls.title}</span></td>
+            <td><span class="class-info bangla-font">${cls.time}</span></td>
           </tr>
         `;
       });
-      container.innerHTML = tableHTML;
+     container.innerHTML = tableHTML;
+  }
+
+  function filterAndSortClasses(classes, searchTerm = '', sortOrder = 'desc') {
+    let filteredClasses = classes.filter(cls => {
+      if (!cls) return false;
+      const searchLower = searchTerm.toLowerCase().trim();
+      return cls.subject.toLowerCase().includes(searchLower) ||
+             cls.title.toLowerCase().includes(searchLower) ||
+             cls.date.includes(searchLower);
+    });
+
+    filteredClasses.sort((a, b) => {
+      const timeA = new Date(a.timestamp || 0).getTime();
+      const timeB = new Date(b.timestamp || 0).getTime();
+      return sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
+    });
+
+    return filteredClasses;
+  }
+
+  function setupSearchAndSort() {
+    const searchInput = $('#search');
+    const sortSelect = $('#sort');
+    const subjectSearchInput = $('#search-subjects');
+
+    if (searchInput && sortSelect) {
+      const updateClassList = () => {
+        const searchTerm = searchInput.value;
+        const sortOrder = sortSelect.value;
+        const filteredClasses = filterAndSortClasses(
+          allClasses.filter(cls => cls.subject === currentSubject),
+          searchTerm,
+          sortOrder
+        );
+        renderCards(filteredClasses, $('#classGrid'));
+      };
+
+      searchInput.addEventListener('input', updateClassList);
+      sortSelect.addEventListener('change', updateClassList);
     }
 
-    function sortByTime(rows, order = 'desc') {
-      if (!rows) return [];
-      return rows.filter(r => r).slice().sort((a, b) => {
-        const timeA = new Date(a.timestamp).getTime();
-        const timeB = new Date(b.timestamp).getTime();
-        return order === 'asc' ? timeA - timeB : timeB - timeA;
-      });
-    }
-
-    function showSubjectPage(subject) {
-      currentSubject = subject;
-      $('#subject-title').innerHTML = `<i class="fas fa-book"></i> <span class="bangla-font">${subject}</span>`;
-      mainPage.style.display = 'none';
-      subjectPage.style.display = 'block';
-      scrollToTop();
-      loadSubjectData(subject);
-    }
-
-    function showMainPage() {
-      subjectPage.style.display = 'none';
-      mainPage.style.display = 'block';
-      scrollToTop();
-    }
-
-    function loadSubjectData(subject) {
-      const classGrid = $('#classGrid');
-      classGrid.innerHTML = '<div class="empty-state"><div class="loading"></div> <p class="bangla-font">লোড হচ্ছে...</p></div>';
-
-      const filteredClasses = allClasses.filter(cls => cls && cls.subject === subject);
-      const sortOrder = $('#sort').value || 'desc';
-      const sortedClasses = sortByTime(filteredClasses, sortOrder);
-
-      renderCards(sortedClasses, classGrid);
-    }
-
-    function loadInitialData() {
-      fetchData().then(rows => {
-        allClasses = normalizeRows(rows);
-        renderTodayClassesSummary(allClasses);
-        setupEventListeners();
-      });
-    }
-
-    function setupEventListeners() {
-      // Subject links
-      $all('.subject-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const subject = link.dataset.name;
-          showSubjectPage(subject);
-        });
-      });
-
-      // Back button
-      $('.back-button').addEventListener('click', (e) => {
-        e.preventDefault();
-        showMainPage();
-      });
-
-      // Search functionality for subjects on main page
-      $('#search-subjects').addEventListener('input', (e) => {
-        const query = e.target.value.trim().toLowerCase();
+    if (subjectSearchInput) {
+      subjectSearchInput.addEventListener('input', () => {
+        const searchTerm = subjectSearchInput.value.toLowerCase().trim();
         const subjectLinks = $all('.subject-link');
         subjectLinks.forEach(link => {
-          const subjectName = link.dataset.name.toLowerCase();
-          link.style.display = subjectName.includes(query) ? 'flex' : 'none';
+          const subjectName = link.getAttribute('data-name').toLowerCase();
+          link.style.display = subjectName.includes(searchTerm) ? '' : 'none';
         });
       });
-
-      // Search functionality for classes on subject page
-      $('#search').addEventListener('input', (e) => {
-        const query = e.target.value.trim().toLowerCase();
-        const filteredClasses = allClasses.filter(cls => 
-          cls.subject === currentSubject && 
-          (cls.title.toLowerCase().includes(query) || cls.subject.toLowerCase().includes(query))
-        );
-        const sortOrder = $('#sort').value || 'desc';
-        const sortedClasses = sortByTime(filteredClasses, sortOrder);
-        renderCards(sortedClasses, $('#classGrid'));
-      });
-
-      // Sort functionality
-      $('#sort').addEventListener('change', (e) => {
-        const sortOrder = e.target.value;
-        loadSubjectData(currentSubject);
-      });
-
-      // Refresh data button
-      $('#refresh-data-btn').addEventListener('click', () => {
-        loadInitialData();
-      });
     }
-
-    // Complete the window load event listener
-window.addEventListener('load', () => {
-  if (checkLoginExpiry()) {
-    loginPage.style.display = 'none';
-    mainPage.style.display = 'block';
-    showAddClassButton();
-    loadInitialData();
-  } else {
-    loginPage.style.display = 'flex';
-    mainPage.style.display = 'none';
-    subjectPage.style.display = 'none';
   }
-});
 
-// Additional helper functions for enhanced functionality
+  function setupSubjectNavigation() {
+    const subjectLinks = $all('.subject-link');
+    subjectLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const subjectName = link.getAttribute('data-name');
+        currentSubject = subjectName;
+        $('#subject-title').innerHTML = `<i class="fas fa-book"></i> <span class="bangla-font">${subjectName}</span>`;
+        mainPage.style.display = 'none';
+        subjectPage.style.display = 'block';
+        
+        const filteredClasses = allClasses.filter(cls => cls.subject === subjectName);
+        renderCards(filteredClasses, $('#classGrid'));
+        scrollToTop();
+      });
+    });
 
-// Function to update statistics dynamically (if needed)
-function updateStats() {
-  const subjects = new Set(allClasses.map(cls => cls.subject)).size;
-  const totalClasses = allClasses.length;
-  const exams = allClasses.filter(cls => cls.subject === "ইক্সাম").length;
-  const missions = allClasses.filter(cls => cls.subject === "মিশন").length;
-
-  $('#exam-stats .stat-number').textContent = `${exams}+`;
-  $('#mission-stats .stat-number').textContent = `${missions}+`;
-  $('.stats .stat-card:nth-child(1) .stat-number').textContent = subjects;
-  $('.stats .stat-card:nth-child(2) .stat-number').textContent = `${totalClasses}+`;
-}
-
-// Function to handle subject link clicks with smooth transition
-function setupSubjectLinks() {
-  $all('.subject-link').forEach(link => {
-    link.removeEventListener('click', handleSubjectLinkClick); // Prevent duplicate listeners
-    link.addEventListener('click', handleSubjectLinkClick);
-  });
-}
-
-function handleSubjectLinkClick(e) {
-  e.preventDefault();
-  const subject = e.currentTarget.dataset.name;
-  showSubjectPage(subject);
-}
-
-// Function to periodically check login expiry
-function startLoginExpiryCheck() {
-  setInterval(() => {
-    if (!checkLoginExpiry()) {
-      logout();
-      showNotification("লগইন সেশন মেয়াদ শেষ হয়েছে। আবার লগইন করুন।", true);
-    }
-  }, 60000); // Check every minute
-}
-
-// Function to handle window resize for responsive adjustments
-function handleResize() {
-  const subjectLinks = $all('.subject-link');
-  const isMobile = window.innerWidth <= 768;
-  subjectLinks.forEach(link => {
-    link.style.display = 'flex'; // Reset subject list display on resize
-  });
-}
-
-// Initialize additional event listeners and checks
-function initialize() {
-  setupSubjectLinks();
-  startLoginExpiryCheck();
-  window.addEventListener('resize', handleResize);
-
-  // Handle form submission on enter key for search inputs
-  $('#search-subjects').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const query = e.target.value.trim().toLowerCase();
-      const subjectLinks = $all('.subject-link');
-      subjectLinks.forEach(link => {
-        const subjectName = link.dataset.name.toLowerCase();
-        link.style.display = subjectName.includes(query) ? 'flex' : 'none';
+    const backButton = $('.back-button');
+    if (backButton) {
+      backButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        subjectPage.style.display = 'none';
+        mainPage.style.display = 'block';
+        scrollToTop();
       });
     }
-  });
+  }
 
-  $('#search').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const query = e.target.value.trim().toLowerCase();
-      const filteredClasses = allClasses.filter(cls => 
-        cls.subject === currentSubject && 
-        (cls.title.toLowerCase().includes(query) || cls.subject.toLowerCase().includes(query))
-      );
-      const sortOrder = $('#sort').value || 'desc';
-      const sortedClasses = sortByTime(filteredClasses, sortOrder);
-      renderCards(sortedClasses, $('#classGrid'));
+  async function loadInitialData() {
+    try {
+      const rows = await fetchData();
+      allClasses = normalizeRows(rows);
+      renderTodayClassesSummary(allClasses);
+      setupSubjectNavigation();
+      setupSearchAndSort();
+    } catch (error) {
+      console.error("Initial data load error:", error);
+      showNotification("প্রাথমিক ডেটা লোড করতে সমস্যা: " + error.message, true);
+    }
+  }
+
+  function refreshData() {
+    const refreshButton = $('#refresh-data-btn');
+    if (refreshButton) {
+      refreshButton.disabled = true;
+      refreshButton.innerHTML = '<div class="loading"></div> <span class="bangla-font">রিফ্রেশ হচ্ছে...</span>';
+      
+      loadInitialData().then(() => {
+        refreshButton.disabled = false;
+        refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> <span class="bangla-font">ডেটা রিফ্রেশ করুন</span>';
+      }).catch(error => {
+        console.error("Refresh error:", error);
+        showNotification("ডেটা রিফ্রেশ করতে সমস্যা: " + error.message, true);
+        refreshButton.disabled = false;
+        refreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> <span class="bangla-font">ডেটা রিফ্রেশ করুন</span>';
+      });
+    }
+  }
+
+  $('#refresh-data-btn').addEventListener('click', refreshData);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (checkLoginExpiry()) {
+      loginPage.style.display = 'none';
+      mainPage.style.display = 'block';
+      if (getUserRole() === 'owner') {
+        showAddClassButton();
+      }
+      loadInitialData();
+    } else {
+      loginPage.style.display = 'flex';
+      mainPage.style.display = 'none';
+      subjectPage.style.display = 'none';
     }
   });
-}
-
-// Call initialize on page load
-document.addEventListener('DOMContentLoaded', initialize);
 </script>
 </body>
 </html>
