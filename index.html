@@ -1588,7 +1588,6 @@
         .then(data => {
           allClasses = data.data || [];
           renderTodayClasses();
-          updateStats();
           if (showNotificationFlag) {
             showNotification('ডেটা সফলভাবে রিফ্রেশ করা হয়েছে!', false);
           }
@@ -1622,18 +1621,6 @@
           <td class="bangla-font">${getTimeFromTimestamp(cls.date)}</td>
         </tr>
       `).join('');
-    }
-
-    function updateStats() {
-      const subjectCount = new Set(allClasses.map(cls => cls.subject)).size;
-      const classCount = allClasses.length;
-      const examCount = allClasses.filter(cls => cls.subject === 'ইক্সাম').length;
-      const missionCount = allClasses.filter(cls => cls.subject === 'মিশন').length;
-
-      $('#main-page .stat-card:nth-child(1) .stat-number').textContent = subjectCount;
-      $('#main-page .stat-card:nth-child(2) .stat-number').textContent = classCount + '+';
-      $('#exam-stats .stat-number').textContent = examCount + '+';
-      $('#mission-stats .stat-number').textContent = missionCount + '+';
     }
 
     function setupSubjectLinks() {
@@ -1728,240 +1715,16 @@
       if (checkLoginExpiry()) {
         loginPage.style.display = 'none';
         mainPage.style.display = 'block';
-        showAddClassButton();
         loadInitialData();
+        if (getUserRole() === 'owner') {
+          showAddClassButton();
+        }
       } else {
         loginPage.style.display = 'flex';
         mainPage.style.display = 'none';
         subjectPage.style.display = 'none';
       }
     });
-
-    // Debounce function to optimize search performance
-    function debounce(func, wait) {
-      let timeout;
-      return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-      };
-    }
-
-    // Enhanced search with debounce
-    function setupEnhancedSearch() {
-      $('#search-subjects').addEventListener('input', debounce((e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const subjectLinks = $all('.subject-link');
-
-        subjectLinks.forEach(link => {
-          const subjectName = link.dataset.name.toLowerCase();
-          link.style.display = subjectName.includes(searchTerm) || searchTerm === '' ? '' : 'none';
-        });
-      }, 300));
-
-      $('#search').addEventListener('input', debounce((e) => {
-        const sortOrder = $('#sort').value;
-        renderClasses(e.target.value, sortOrder);
-      }, 300));
-    }
-
-    // Validate URLs to ensure safe rendering
-    function isValidURL(string) {
-      try {
-        new URL(string);
-        return true;
-      } catch (_) {
-        return false;
-      }
-    }
-
-    // Sanitize HTML to prevent XSS
-    function sanitizeHTML(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    // Cache data for offline access
-    function cacheClasses(data) {
-      try {
-        localStorage.setItem('alim26_classes_cache', JSON.stringify(data));
-        localStorage.setItem('alim26_cache_timestamp', new Date().getTime());
-      } catch (error) {
-        console.error('Error caching data:', error);
-        showNotification('ডেটা ক্যাশ করতে সমস্যা হয়েছে!', true);
-      }
-    }
-
-    // Load cached data if available
-    function loadCachedClasses() {
-      const cachedData = localStorage.getItem('alim26_classes_cache');
-      const cacheTimestamp = localStorage.getItem('alim26_cache_timestamp');
-      const cacheAge = cacheTimestamp ? (new Date().getTime() - parseInt(cacheTimestamp)) / (1000 * 60 * 60) : Infinity;
-
-      if (cachedData && cacheAge < 24) { // Cache valid for 24 hours
-        allClasses = JSON.parse(cachedData).data || [];
-        renderTodayClasses();
-        updateStats();
-        return true;
-      }
-      return false;
-    }
-
-    // Enhanced fetchClasses with caching and offline support
-    function fetchClasses(showNotificationFlag = false) {
-      const todayClassesBody = $('#today-classes-body');
-      todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;"><div class="loading"></div> লোড হচ্ছে...</td></tr>`;
-
-      if (navigator.onLine) {
-        fetch(API_URL)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(data => {
-            allClasses = data.data || [];
-            cacheClasses(data);
-            renderTodayClasses();
-            updateStats();
-            if (showNotificationFlag) {
-              showNotification('ডেটা সফলভাবে রিফ্রেশ করা হয়েছে!', false);
-            }
-          })
-          .catch(error => {
-            console.error('Error fetching classes:', error);
-            todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;">ডেটা লোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</td></tr>`;
-            if (loadCachedClasses()) {
-              showNotification('ইন্টারনেট সংযোগ নেই। ক্যাশ থেকে ডেটা দেখানো হচ্ছে।', true);
-            } else {
-              showNotification('ডেটা লোড করতে সমস্যা হয়েছে!', true);
-            }
-          });
-      } else {
-        if (loadCachedClasses()) {
-          showNotification('ইন্টারনেট সংযোগ নেই। ক্যাশ থেকে ডেটা দেখানো হচ্ছে।', true);
-        } else {
-          todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;">ইন্টারনেট সংযোগ নেই এবং কোনো ক্যাশ ডেটা নেই।</td></tr>`;
-          showNotification('ইন্টারনেট সংযোগ নেই এবং কোনো ক্যাশ ডেটা নেই।', true);
-        }
-      }
-    }
-
-    // Enhanced subject link setup with validation
-    function setupSubjectLinks() {
-      $all('.subject-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const subject = link.dataset.name;
-          if (availableSubjects.includes(subject)) {
-            currentSubject = subject;
-            mainPage.style.display = 'none';
-            subjectPage.style.display = 'block';
-            $('#subject-title').innerHTML = `<i class="fas fa-book"></i> ${sanitizeHTML(subject)}`;
-            renderClasses();
-            scrollToTop();
-          } else {
-            showNotification('অবৈধ সাবজেক্ট নির্বাচিত!', true);
-          }
-        });
-      });
-    }
-
-    // Periodic data refresh
-    function checkForUpdates() {
-      setInterval(() => {
-        if (checkLoginExpiry() && navigator.onLine) {
-          fetchClasses();
-        } else if (!checkLoginExpiry()) {
-          logout();
-          showNotification('লগইন মেয়াদ শেষ হয়েছে। আবার লগইন করুন।', true);
-        }
-      }, 1000 * 60 * 60); // Check every hour
-    }
-
-    // Handle window resize for responsive adjustments
-    window.addEventListener('resize', () => {
-      if (subjectPage.style.display === 'block') {
-        renderClasses($('#search').value, $('#sort').value);
-      }
-    });
-
-    // Handle online/offline states
-    window.addEventListener('online', () => {
-      showNotification('ইন্টারনেট সংযোগ পুনরুদ্ধার করা হয়েছে!', false);
-      fetchClasses();
-    });
-
-    window.addEventListener('offline', () => {
-      showNotification('ইন্টারনেট সংযোগ বিচ্ছিন্ন। ক্যাশ থেকে ডেটা দেখানো হচ্ছে।', true);
-      loadCachedClasses();
-    });
-
-    // Truncate long descriptions for better readability
-    function truncateDescription(description, maxLength = 150) {
-      if (!description) return '';
-      return description.length > maxLength ? description.substring(0, maxLength) + '...' : description;
-    }
-
-    // Enhanced renderClasses with sanitization and truncation
-    function renderClasses(searchTerm = '', sortOrder = 'desc') {
-      const classGrid = $('#classGrid');
-      let filteredClasses = allClasses.filter(cls => cls.subject === currentSubject);
-
-      if (searchTerm) {
-        filteredClasses = filteredClasses.filter(cls => 
-          cls.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (cls.description && cls.description.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-      }
-
-      filteredClasses.sort((a, b) => {
-        const dateA = new Date(a.date || getTodayDate());
-        const dateB = new Date(b.date || getTodayDate());
-        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
-      });
-
-      if (filteredClasses.length === 0) {
-        classGrid.innerHTML = `<div class="empty-state bangla-font">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v6m0 4v10m-6-6h12"></path>
-          </svg>
-          কোনো ক্লাস পাওয়া যায়নি
-        </div>`;
-        return;
-      }
-
-      classGrid.innerHTML = filteredClasses.map(cls => `
-        <div class="card">
-          <div class="subject bangla-font"><i class="fas fa-book"></i> ${sanitizeHTML(cls.subject)}</div>
-          <div class="time bangla-font"><i class="fas fa-clock"></i> ${formatDateToBangla(getDateFromTimestamp(cls.date))} ${getTimeFromTimestamp(cls.date)}</div>
-          <div class="video-title bangla-font">${sanitizeHTML(cls.title)}</div>
-          <div class="card-badge bangla-font">${sanitizeHTML(cls.type || 'ক্লাস')}</div>
-          ${cls.description ? `<p class="bangla-font">${sanitizeHTML(truncateDescription(cls.description))}</p>` : ''}
-          ${cls.link && isValidURL(cls.link) ? `<a href="${sanitizeHTML(cls.link)}" class="btn bangla-font" target="_blank" rel="noopener"><i class="fas fa-link"></i> দেখুন</a>` : '<button class="btn disabled bangla-font"><i class="fas fa-lock"></i> লকড</button>'}
-        </div>
-      `).join('');
-    }
-
-    // Check session timeout on user interactions
-    function checkSessionTimeout() {
-      if (!checkLoginExpiry()) {
-        logout();
-        showNotification('সেশনের মেয়াদ শেষ। আবার লগইন করুন।', true);
-      }
-    }
-
-    // Add session timeout checks on interactions
-    document.addEventListener('click', checkSessionTimeout);
-    document.addEventListener('keypress', checkSessionTimeout);
-
-    // Initialize enhanced search
-    setupEnhancedSearch();
-
-    // Start periodic updates
-    checkForUpdates();
-
   </script>
 </body>
 </html>
