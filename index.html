@@ -1354,391 +1354,392 @@
     </div>
   </div>
   <div id="notification" class="notification"></div>
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxbkM3I0Zp_Bqr4XJcjNB6A82h-RYGXUYq7oiNkmhAuJzslOYJtPjhNmuIIwJXTaCzgnA/exec";
+   <script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbxbkM3I0Zp_Bqr4XJcjNB6A82h-RYGXUYq7oiNkmhAuJzslOYJtPjhNmuIIwJXTaCzgnA/exec";
 
-    function $(sel, root = document) { return root.querySelector(sel); }
-    function $all(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
+  function $(sel, root = document) { return root.querySelector(sel); }
+  function $all(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
 
-    let currentSubject = null;
-    const loginPage = $('#login-page');
-    const mainPage = $('#main-page');
-    const subjectPage = $('#subject-page');
-    const warningModal = $('#warning-modal');
-    let allClasses = [];
+  let currentSubject = null;
+  const loginPage = $('#login-page');
+  const mainPage = $('#main-page');
+  const subjectPage = $('#subject-page');
+  const warningModal = $('#warning-modal');
+  let allClasses = [];
 
-    const availableSubjects = [
-      "কুরআন মাজীদ",
-      "হাদীস ও উসূলুল হাদীস",
-      "আল ফিকহ প্রথম পত্র",
-      "আল ফিকহ দ্বিতীয় পত্র",
-      "আরবি প্রথম পত্র",
-      "আরবি দ্বিতীয় পত্র",
-      "আরবি সাহিত্য",
-      "বালাগাত ও মানতিক",
-      "বাংলা প্রথম পত্র",
-      "বাংলা দ্বিতীয় পত্র",
-      "ইংরেজি প্রথম পত্র",
-      "ইংরেজি দ্বিতীয় পত্র",
-      "ইসলামের ইতিহাস",
-      "তথ্য ও যোগাযোগ প্রযুক্তি",
-      "পদার্থবিজ্ঞান প্রথম পত্র",
-      "পদার্থবিজ্ঞান দ্বিতীয় পত্র",
-      "রসায়ন প্রথম পত্র",
-      "রসায়ন দ্বিতীয় পত্র",
-      "জীববিজ্ঞান প্রথম পত্র",
-      "জীববিজ্ঞান দ্বিতীয় পত্র",
-      "অর্থনীতি প্রথম পত্র",
-      "অর্থনীতি দ্বিতীয় পত্র",
-      "পৌরনীতি ও সুশাসন প্রথম পত্র",
-      "পৌরনীতি ও সুশাসন দ্বিতীয় পত্র",
-      "উচ্চতর গণিত প্রথম পত্র",
-      "উচ্চতর গণিত দ্বিতীয় পত্র",
-      "মিশন",
-      "ইক্সাম",
-      "ক্লাসের লেকচার শীট",
-      "পরীক্ষার রেজাল্ট শীট",
-      "অন্যান্য"
-    ];
+  const availableSubjects = [
+    "কুরআন মাজীদ",
+    "হাদীস ও উসূলুল হাদীস",
+    "আল ফিকহ প্রথম পত্র",
+    "আল ফিকহ দ্বিতীয় পত্র",
+    "আরবি প্রথম পত্র",
+    "আরবি দ্বিতীয় পত্র",
+    "আরবি সাহিত্য",
+    "বালাগাত ও মানতিক",
+    "বাংলা প্রথম পত্র",
+    "বাংলা দ্বিতীয় পত্র",
+    "ইংরেজি প্রথম পত্র",
+    "ইংরেজি দ্বিতীয় পত্র",
+    "ইসলামের ইতিহাস",
+    "তথ্য ও যোগাযোগ প্রযুক্তি",
+    "পদার্থবিজ্ঞান প্রথম পত্র",
+    "পদার্থবিজ্ঞান দ্বিতীয় পত্র",
+    "রসায়ন প্রথম পত্র",
+    "রসায়ন দ্বিতীয় পত্র",
+    "জীববিজ্ঞান প্রথম পত্র",
+    "জীববিজ্ঞান দ্বিতীয় পত্র",
+    "অর্থনীতি প্রথম পত্র",
+    "অর্থনীতি দ্বিতীয় পত্র",
+    "পৌরনীতি ও সুশাসন প্রথম পত্র",
+    "পৌরনীতি ও সুশাসন দ্বিতীয় পত্র",
+    "উচ্চতর গণিত প্রথম পত্র",
+    "উচ্চতর গণিত দ্বিতীয় পত্র",
+    "মিশন",
+    "ইক্সাম",
+    "ক্লাসের লেকচার শীট",
+    "পরীক্ষার রেজাল্ট শীট",
+    "অন্যান্য"
+  ];
 
-    const LOGIN_EXPIRY_KEY = 'alim26_login_expiry';
-    const IS_LOGGED_IN_KEY = 'alim26_is_logged_in';
-    const USER_ROLE_KEY = 'alim26_user_role';
+  const LOGIN_EXPIRY_KEY = 'alim26_login_expiry';
+  const IS_LOGGED_IN_KEY = 'alim26_is_logged_in';
+  const USER_ROLE_KEY = 'alim26_user_role';
 
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setLoginExpiry(role) {
+    const now = new Date();
+    const oneMonthFromNow = new Date(now.setMonth(now.getMonth() + 1));
+    localStorage.setItem(LOGIN_EXPIRY_KEY, oneMonthFromNow.getTime());
+    localStorage.setItem(IS_LOGGED_IN_KEY, 'true');
+    localStorage.setItem(USER_ROLE_KEY, role);
+  }
+
+  function checkLoginExpiry() {
+    const expiryTime = localStorage.getItem(LOGIN_EXPIRY_KEY);
+    const isLoggedIn = localStorage.getItem(IS_LOGGED_IN_KEY);
+    
+    if (!expiryTime || !isLoggedIn) {
+      return false;
     }
+    
+    const now = new Date().getTime();
+    return now < parseInt(expiryTime);
+  }
 
-    function setLoginExpiry(role) {
-      const now = new Date();
-      const oneMonthFromNow = new Date(now.setMonth(now.getMonth() + 1));
-      localStorage.setItem(LOGIN_EXPIRY_KEY, oneMonthFromNow.getTime());
-      localStorage.setItem(IS_LOGGED_IN_KEY, 'true');
-      localStorage.setItem(USER_ROLE_KEY, role);
+  function getUserRole() {
+    return localStorage.getItem(USER_ROLE_KEY) || 'user';
+  }
+
+  function logout() {
+    localStorage.removeItem(LOGIN_EXPIRY_KEY);
+    localStorage.removeItem(IS_LOGGED_IN_KEY);
+    localStorage.removeItem(USER_ROLE_KEY);
+    loginPage.style.display = 'flex';
+    mainPage.style.display = 'none';
+    subjectPage.style.display = 'none';
+  }
+
+  function showWarningModal() {
+    warningModal.classList.add('show');
+  }
+
+  function closeWarningModal() {
+    warningModal.classList.remove('show');
+  }
+
+  function showNotification(message, isError = false, isWarning = false) {
+    const notification = $('#notification');
+    notification.innerHTML = `<i class="${isError ? 'fas fa-exclamation-circle' : isWarning ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle'}"></i> ${message}`;
+    notification.className = 'notification ' + (isError ? 'error' : isWarning ? 'warning' : 'success');
+    notification.classList.add('show');
+
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
+  }
+
+  function checkPassword() {
+    const password = $('#password').value;
+    const errorElement = $('#error-message');
+    
+    if (password === 'USERALIM26') {
+      setLoginExpiry('user');
+      loginPage.style.display = 'none';
+      mainPage.style.display = 'block';
+      showWarningModal();
+      loadInitialData();
+      scrollToTop();
+    } else if (password === 'OWNERALIM26') {
+      setLoginExpiry('owner');
+      loginPage.style.display = 'none';
+      mainPage.style.display = 'block';
+      showWarningModal();
+      showAddClassButton();
+      loadInitialData();
+      scrollToTop();
+    } else {
+      errorElement.style.display = 'block';
+      setTimeout(() => {
+        errorElement.style.display = 'none';
+      }, 3000);
     }
+  }
 
-    function checkLoginExpiry() {
-      const expiryTime = localStorage.getItem(LOGIN_EXPIRY_KEY);
-      const isLoggedIn = localStorage.getItem(IS_LOGGED_IN_KEY);
-      
-      if (!expiryTime || !isLoggedIn) {
-        return false;
+  function showAddClassButton() {
+    const addClassBtn = $('#add-class-btn');
+    if (addClassBtn && getUserRole() === 'owner') {
+      addClassBtn.style.display = 'inline-flex';
+    }
+  }
+
+  $('#password').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      checkPassword();
+    }
+  });
+
+  function getDateFromTimestamp(timestamp) {
+    if (!timestamp) return getTodayDate();
+
+    try {
+      if (typeof timestamp === 'string') {
+        const date = new Date(timestamp);
+        if (!isNaN(date)) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        }
       }
-      
-      const now = new Date().getTime();
-      return now < parseInt(expiryTime);
+      return getTodayDate();
+    } catch (error) {
+      console.error("Timestamp parsing error:", error, timestamp);
+      return getTodayDate();
+    }
+  }
+
+  function getTimeFromTimestamp(timestamp) {
+    if (!timestamp) return '3:37 PM';
+
+    try {
+      const date = new Date(timestamp);
+      if (!isNaN(date)) {
+        const hours = date.getHours();
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const hour12 = hours % 12 || 12;
+        return `${hour12}:${minutes} ${period}`;
+      }
+      return '3:37 PM';
+    } catch (error) {
+      console.error("Time parsing error:", error, timestamp);
+      return '3:37 PM';
+    }
+  }
+
+  function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  const banglaMonths = [
+    'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+    'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+  ];
+
+  function formatDateToBangla(dateStr) {
+    if (!dateStr) return '';
+
+    try {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        const [year, month, day] = dateStr.split('-');
+        return `${parseInt(day)} ${banglaMonths[parseInt(month) - 1]} ${year}`;
+      }
+      return dateStr;
+    } catch (error) {
+      console.error("Date formatting error:", error, dateStr);
+      return dateStr;
+    }
+  }
+
+  function loadInitialData() {
+    showNotification('ডেটা লোড শুরু হচ্ছে...', false, true);
+    fetchClasses();
+    setupSubjectLinks();
+    setupSearch();
+    setupSort();
+    setupBackButton();
+    $('#refresh-data-btn').addEventListener('click', handleRefreshClick);
+  }
+
+  function fetchClasses(showNotificationFlag = false) {
+    const todayClassesBody = $('#today-classes-body');
+    todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;"><div class="loading"></div> ডেটা লোড হচ্ছে...</td></tr>`;
+
+    return fetch(API_URL)
+      .then(response => response.json())
+      .then(data => {
+        allClasses = data.data || [];
+        renderTodayClasses();
+        showNotification(showNotificationFlag ? 'ডেটা সফলভাবে রিফ্রেশ করা হয়েছে!' : 'ডেটা সফলভাবে লোড হয়েছে!', false);
+      })
+      .catch(error => {
+        console.error('Error fetching classes:', error);
+        todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;">ডেটা লোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</td></tr>`;
+        showNotification('ডেটা লোড করতে সমস্যা হয়েছে!', true);
+      });
+  }
+
+  function handleRefreshClick() {
+    const btn = $('#refresh-data-btn');
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('span');
+    const originalText = text.innerHTML;
+    btn.disabled = true;
+    text.innerHTML = 'ডেটা রিফ্রেশ হচ্ছে...';
+    icon.classList.add('fa-spin'); // Use existing icon with spin effect
+
+    showNotification('ডেটা রিফ্রেশ শুরু হচ্ছে...', false, true);
+
+    fetchClasses(true).finally(() => {
+      btn.disabled = false;
+      text.innerHTML = originalText;
+      icon.classList.remove('fa-spin');
+    });
+  }
+
+  function renderTodayClasses() {
+    const todayClassesBody = $('#today-classes-body');
+    const today = getTodayDate();
+    const todayClasses = allClasses.filter(cls => getDateFromTimestamp(cls.date) === today);
+
+    if (todayClasses.length === 0) {
+      todayClassesBody.innerHTML = `<tr><td colspan="3" class="empty-state bangla-font">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v6m0 4v10m-6-6h12"></path>
+        </svg>
+        আজকের জন্য কোনো ক্লাস নেই
+      </td></tr>`;
+      return;
     }
 
-    function getUserRole() {
-      return localStorage.getItem(USER_ROLE_KEY) || 'user';
+    todayClassesBody.innerHTML = todayClasses.map(cls => `
+      <tr>
+        <td><span class="subject-badge bangla-font">${cls.subject}</span></td>
+        <td class="class-info bangla-font">${cls.title}</td>
+        <td class="bangla-font">${getTimeFromTimestamp(cls.date)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function setupSubjectLinks() {
+    $all('.subject-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentSubject = link.dataset.name;
+        mainPage.style.display = 'none';
+        subjectPage.style.display = 'block';
+        $('#subject-title').innerHTML = `<i class="fas fa-book"></i> ${currentSubject}`;
+        renderClasses();
+        scrollToTop();
+      });
+    });
+  }
+
+  function setupBackButton() {
+    $('.back-button').addEventListener('click', (e) => {
+      e.preventDefault();
+      subjectPage.style.display = 'none';
+      mainPage.style.display = 'block';
+      $('#search').value = '';
+      currentSubject = null;
+      scrollToTop();
+    });
+  }
+
+  function renderClasses(searchTerm = '', sortOrder = 'desc') {
+    const classGrid = $('#classGrid');
+    let filteredClasses = allClasses.filter(cls => cls.subject === currentSubject);
+
+    if (searchTerm) {
+      filteredClasses = filteredClasses.filter(cls => 
+        cls.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cls.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
-    function logout() {
-      localStorage.removeItem(LOGIN_EXPIRY_KEY);
-      localStorage.removeItem(IS_LOGGED_IN_KEY);
-      localStorage.removeItem(USER_ROLE_KEY);
+    filteredClasses.sort((a, b) => {
+      const dateA = new Date(a.date || getTodayDate());
+      const dateB = new Date(b.date || getTodayDate());
+      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+    });
+
+    if (filteredClasses.length === 0) {
+      classGrid.innerHTML = `<div class="empty-state bangla-font">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v6m0 4v10m-6-6h12"></path>
+        </svg>
+        কোনো ক্লাস পাওয়া যায়নি
+      </div>`;
+      return;
+    }
+
+    classGrid.innerHTML = filteredClasses.map(cls => `
+      <div class="card">
+        <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject}</div>
+        <div class="time bangla-font"><i class="fas fa-clock"></i> ${formatDateToBangla(getDateFromTimestamp(cls.date))} ${getTimeFromTimestamp(cls.date)}</div>
+        <div class="video-title bangla-font">${cls.title}</div>
+        <div class="card-badge bangla-font">${cls.type || 'ক্লাস'}</div>
+        ${cls.description ? `<p class="bangla-font">${cls.description}</p>` : ''}
+        ${cls.link ? `<a href="${cls.link}" class="btn bangla-font" target="_blank"><i class="fas fa-link"></i> দেখুন</a>` : '<button class="btn disabled bangla-font"><i class="fas fa-lock"></i> লকড</button>'}
+      </div>
+    `).join('');
+  }
+
+  function setupSearch() {
+    $('#search-subjects').addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const subjectLinks = $all('.subject-link');
+
+      subjectLinks.forEach(link => {
+        const subjectName = link.dataset.name.toLowerCase();
+        link.style.display = subjectName.includes(searchTerm) || searchTerm === '' ? '' : 'none';
+      });
+    });
+
+    $('#search').addEventListener('input', (e) => {
+      const sortOrder = $('#sort').value;
+      renderClasses(e.target.value, sortOrder);
+    });
+  }
+
+  function setupSort() {
+    $('#sort').addEventListener('change', (e) => {
+      const searchTerm = $('#search').value;
+      renderClasses(searchTerm, e.target.value);
+    });
+  }
+
+  window.addEventListener('load', () => {
+    if (checkLoginExpiry()) {
+      loginPage.style.display = 'none';
+      mainPage.style.display = 'block';
+      loadInitialData();
+      if (getUserRole() === 'owner') {
+        showAddClassButton();
+      }
+    } else {
       loginPage.style.display = 'flex';
       mainPage.style.display = 'none';
       subjectPage.style.display = 'none';
     }
-
-    function showWarningModal() {
-      warningModal.classList.add('show');
-    }
-
-    function closeWarningModal() {
-      warningModal.classList.remove('show');
-    }
-
-    function showNotification(message, isError = false, isWarning = false) {
-      const notification = $('#notification');
-      notification.innerHTML = `<i class="${isError ? 'fas fa-exclamation-circle' : isWarning ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle'}"></i> ${message}`;
-      notification.className = 'notification ' + (isError ? 'error' : isWarning ? 'warning' : 'success');
-      notification.classList.add('show');
-
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
-    }
-
-    function checkPassword() {
-      const password = $('#password').value;
-      const errorElement = $('#error-message');
-      
-      if (password === 'USERALIM26') {
-        setLoginExpiry('user');
-        loginPage.style.display = 'none';
-        mainPage.style.display = 'block';
-        showWarningModal();
-        loadInitialData();
-        scrollToTop();
-      } else if (password === 'OWNERALIM26') {
-        setLoginExpiry('owner');
-        loginPage.style.display = 'none';
-        mainPage.style.display = 'block';
-        showWarningModal();
-        showAddClassButton();
-        loadInitialData();
-        scrollToTop();
-      } else {
-        errorElement.style.display = 'block';
-        setTimeout(() => {
-          errorElement.style.display = 'none';
-        }, 3000);
-      }
-    }
-
-    function showAddClassButton() {
-      const addClassBtn = $('#add-class-btn');
-      if (addClassBtn && getUserRole() === 'owner') {
-        addClassBtn.style.display = 'inline-flex';
-      }
-    }
-
-    $('#password').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        checkPassword();
-      }
-    });
-
-    function getDateFromTimestamp(timestamp) {
-      if (!timestamp) return getTodayDate();
-
-      try {
-        if (typeof timestamp === 'string') {
-          const date = new Date(timestamp);
-          if (!isNaN(date)) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-          }
-        }
-        return getTodayDate();
-      } catch (error) {
-        console.error("Timestamp parsing error:", error, timestamp);
-        return getTodayDate();
-      }
-    }
-
-    function getTimeFromTimestamp(timestamp) {
-      if (!timestamp) return '3:37 PM';
-
-      try {
-        const date = new Date(timestamp);
-        if (!isNaN(date)) {
-          const hours = date.getHours();
-          const minutes = String(date.getMinutes()).padStart(2, '0');
-          const period = hours >= 12 ? 'PM' : 'AM';
-          const hour12 = hours % 12 || 12;
-          return `${hour12}:${minutes} ${period}`;
-        }
-        return '3:37 PM';
-      } catch (error) {
-        console.error("Time parsing error:", error, timestamp);
-        return '3:37 PM';
-      }
-    }
-
-    function getTodayDate() {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    const banglaMonths = [
-      'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
-      'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
-    ];
-
-    function formatDateToBangla(dateStr) {
-      if (!dateStr) return '';
-
-      try {
-        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-          const [year, month, day] = dateStr.split('-');
-          return `${parseInt(day)} ${banglaMonths[parseInt(month) - 1]} ${year}`;
-        }
-        return dateStr;
-      } catch (error) {
-        console.error("Date formatting error:", error, dateStr);
-        return dateStr;
-      }
-    }
-
-    function loadInitialData() {
-      fetchClasses();
-      setupSubjectLinks();
-      setupSearch();
-      setupSort();
-      setupBackButton();
-      $('#refresh-data-btn').addEventListener('click', handleRefreshClick);
-    }
-
-    function fetchClasses(showNotificationFlag = false) {
-      const todayClassesBody = $('#today-classes-body');
-      todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;"><div class="loading"></div> লোড হচ্ছে...</td></tr>`;
-
-      return fetch(API_URL)
-        .then(response => response.json())
-        .then(data => {
-          allClasses = data.data || [];
-          renderTodayClasses();
-          if (showNotificationFlag) {
-            showNotification('ডেটা সফলভাবে রিফ্রেশ করা হয়েছে!', false);
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching classes:', error);
-          todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;">ডেটা লোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</td></tr>`;
-          showNotification('ডেটা লোড করতে সমস্যা হয়েছে!', true);
-        });
-    }
-
-    function handleRefreshClick() {
-      const btn = $('#refresh-data-btn');
-      const icon = btn.querySelector('i');
-      const text = btn.querySelector('span');
-      const originalText = text.innerHTML;
-      btn.disabled = true;
-      text.innerHTML = 'ডাটা রিফ্রেশ হচ্ছে।';
-      icon.classList.add('loading');
-
-      fetchClasses(true).finally(() => {
-        btn.disabled = false;
-        text.innerHTML = originalText;
-        icon.classList.remove('loading');
-      });
-    }
-
-    function renderTodayClasses() {
-      const todayClassesBody = $('#today-classes-body');
-      const today = getTodayDate();
-      const todayClasses = allClasses.filter(cls => getDateFromTimestamp(cls.date) === today);
-
-      if (todayClasses.length === 0) {
-        todayClassesBody.innerHTML = `<tr><td colspan="3" class="empty-state bangla-font">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v6m0 4v10m-6-6h12"></path>
-          </svg>
-          আজকের জন্য কোনো ক্লাস নেই
-        </td></tr>`;
-        return;
-      }
-
-      todayClassesBody.innerHTML = todayClasses.map(cls => `
-        <tr>
-          <td><span class="subject-badge bangla-font">${cls.subject}</span></td>
-          <td class="class-info bangla-font">${cls.title}</td>
-          <td class="bangla-font">${getTimeFromTimestamp(cls.date)}</td>
-        </tr>
-      `).join('');
-    }
-
-    function setupSubjectLinks() {
-      $all('.subject-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          currentSubject = link.dataset.name;
-          mainPage.style.display = 'none';
-          subjectPage.style.display = 'block';
-          $('#subject-title').innerHTML = `<i class="fas fa-book"></i> ${currentSubject}`;
-          renderClasses();
-          scrollToTop();
-        });
-      });
-    }
-
-    function setupBackButton() {
-      $('.back-button').addEventListener('click', (e) => {
-        e.preventDefault();
-        subjectPage.style.display = 'none';
-        mainPage.style.display = 'block';
-        $('#search').value = '';
-        currentSubject = null;
-        scrollToTop();
-      });
-    }
-
-    function renderClasses(searchTerm = '', sortOrder = 'desc') {
-      const classGrid = $('#classGrid');
-      let filteredClasses = allClasses.filter(cls => cls.subject === currentSubject);
-
-      if (searchTerm) {
-        filteredClasses = filteredClasses.filter(cls => 
-          cls.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          cls.description.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-
-      filteredClasses.sort((a, b) => {
-        const dateA = new Date(a.date || getTodayDate());
-        const dateB = new Date(b.date || getTodayDate());
-        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
-      });
-
-      if (filteredClasses.length === 0) {
-        classGrid.innerHTML = `<div class="empty-state bangla-font">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v6m0 4v10m-6-6h12"></path>
-          </svg>
-          কোনো ক্লাস পাওয়া যায়নি
-        </div>`;
-        return;
-      }
-
-      classGrid.innerHTML = filteredClasses.map(cls => `
-        <div class="card">
-          <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject}</div>
-          <div class="time bangla-font"><i class="fas fa-clock"></i> ${formatDateToBangla(getDateFromTimestamp(cls.date))} ${getTimeFromTimestamp(cls.date)}</div>
-          <div class="video-title bangla-font">${cls.title}</div>
-          <div class="card-badge bangla-font">${cls.type || 'ক্লাস'}</div>
-          ${cls.description ? `<p class="bangla-font">${cls.description}</p>` : ''}
-          ${cls.link ? `<a href="${cls.link}" class="btn bangla-font" target="_blank"><i class="fas fa-link"></i> দেখুন</a>` : '<button class="btn disabled bangla-font"><i class="fas fa-lock"></i> লকড</button>'}
-        </div>
-      `).join('');
-    }
-
-    function setupSearch() {
-      $('#search-subjects').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const subjectLinks = $all('.subject-link');
-
-        subjectLinks.forEach(link => {
-          const subjectName = link.dataset.name.toLowerCase();
-          link.style.display = subjectName.includes(searchTerm) || searchTerm === '' ? '' : 'none';
-        });
-      });
-
-      $('#search').addEventListener('input', (e) => {
-        const sortOrder = $('#sort').value;
-        renderClasses(e.target.value, sortOrder);
-      });
-    }
-
-    function setupSort() {
-      $('#sort').addEventListener('change', (e) => {
-        const searchTerm = $('#search').value;
-        renderClasses(searchTerm, e.target.value);
-      });
-    }
-
-    window.addEventListener('load', () => {
-      if (checkLoginExpiry()) {
-        loginPage.style.display = 'none';
-        mainPage.style.display = 'block';
-        loadInitialData();
-        if (getUserRole() === 'owner') {
-          showAddClassButton();
-        }
-      } else {
-        loginPage.style.display = 'flex';
-        mainPage.style.display = 'none';
-        subjectPage.style.display = 'none';
-      }
-    });
-  </script>
+  });
+   </script>
 </body>
 </html>
