@@ -1574,16 +1574,14 @@
       setupSearch();
       setupSort();
       setupBackButton();
-      $('#refresh-data-btn').addEventListener('click', () => {
-        fetchClasses(true);
-      });
+      $('#refresh-data-btn').addEventListener('click', handleRefreshClick);
     }
 
     function fetchClasses(showNotificationFlag = false) {
       const todayClassesBody = $('#today-classes-body');
       todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;"><div class="loading"></div> লোড হচ্ছে...</td></tr>`;
 
-      fetch(API_URL)
+      return fetch(API_URL)
         .then(response => response.json())
         .then(data => {
           allClasses = data.data || [];
@@ -1597,6 +1595,22 @@
           todayClassesBody.innerHTML = `<tr><td colspan="3" class="bangla-font" style="text-align: center; padding: 20px;">ডেটা লোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।</td></tr>`;
           showNotification('ডেটা লোড করতে সমস্যা হয়েছে!', true);
         });
+    }
+
+    function handleRefreshClick() {
+      const btn = $('#refresh-data-btn');
+      const icon = btn.querySelector('i');
+      const text = btn.querySelector('span');
+      const originalText = text.innerHTML;
+      btn.disabled = true;
+      text.innerHTML = 'ডাটা রিফ্রেশ হচ্ছে।';
+      icon.classList.add('loading');
+
+      fetchClasses(true).finally(() => {
+        btn.disabled = false;
+        text.innerHTML = originalText;
+        icon.classList.remove('loading');
+      });
     }
 
     function renderTodayClasses() {
