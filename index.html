@@ -1159,6 +1159,13 @@
     #refresh-data-btn {
       margin-left: auto;
     }
+
+    .class-serial {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-left: auto;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -1505,14 +1512,12 @@
       if (!timestamp) return getTodayDate();
 
       try {
-        if (typeof timestamp === 'string') {
-          const date = new Date(timestamp);
-          if (!isNaN(date)) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-          }
+        const date = new Date(timestamp);
+        if (!isNaN(date.getTime())) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
         }
         return getTodayDate();
       } catch (error) {
@@ -1526,7 +1531,7 @@
 
       try {
         const date = new Date(timestamp);
-        if (!isNaN(date)) {
+        if (!isNaN(date.getTime())) {
           const hours = date.getHours();
           const minutes = String(date.getMinutes()).padStart(2, '0');
           const period = hours >= 12 ? 'PM' : 'AM';
@@ -1617,7 +1622,7 @@
     function renderTodayClasses() {
       const todayClassesBody = $('#today-classes-body');
       const today = getTodayDate();
-      const todayClasses = allClasses.filter(cls => getDateFromTimestamp(cls.date) === today);
+      const todayClasses = allClasses.filter(cls => getDateFromTimestamp(cls.timestamp) === today);
 
       if (todayClasses.length === 0) {
         todayClassesBody.innerHTML = `<tr><td colspan="3" class="empty-state bangla-font">
@@ -1633,7 +1638,7 @@
         <tr>
           <td><span class="subject-badge bangla-font">${cls.subject}</span></td>
           <td class="class-info bangla-font">${cls.title}</td>
-          <td class="bangla-font">${getTimeFromTimestamp(cls.date)}</td>
+          <td class="bangla-font">${getTimeFromTimestamp(cls.timestamp)}</td>
         </tr>
       `).join('');
     }
@@ -1670,13 +1675,13 @@
       if (searchTerm) {
         filteredClasses = filteredClasses.filter(cls => 
           cls.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          cls.description.toLowerCase().includes(searchTerm.toLowerCase())
+          (cls.description && cls.description.toLowerCase().includes(searchTerm.toLowerCase()))
         );
       }
 
       filteredClasses.sort((a, b) => {
-        const dateA = new Date(a.date || getTodayDate());
-        const dateB = new Date(b.date || getTodayDate());
+        const dateA = new Date(a.timestamp || 0);
+        const dateB = new Date(b.timestamp || 0);
         return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
       });
 
@@ -1690,16 +1695,20 @@
         return;
       }
 
-      classGrid.innerHTML = filteredClasses.map(cls => `
-        <div class="card">
-          <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject}</div>
-          <div class="time bangla-font"><i class="fas fa-clock"></i> ${formatDateToBangla(getDateFromTimestamp(cls.date))} ${getTimeFromTimestamp(cls.date)}</div>
-          <div class="video-title bangla-font">${cls.title}</div>
-          <div class="card-badge bangla-font">${cls.type || 'ক্লাস'}</div>
-          ${cls.description ? `<p class="bangla-font">${cls.description}</p>` : ''}
-          ${cls.link ? `<a href="${cls.link}" class="btn bangla-font" target="_blank"><i class="fas fa-link"></i> দেখুন</a>` : '<button class="btn disabled bangla-font"><i class="fas fa-lock"></i> লকড</button>'}
-        </div>
-      `).join('');
+      classGrid.innerHTML = filteredClasses.map((cls, index) => {
+        // প্রতি সাবজেক্টে আলাদা সিরিয়াল: desc-এ নতুনতম ১, asc-এ পুরানোতম ১
+        const serial = sortOrder === 'desc' ? (index + 1) : (filteredClasses.length - index);
+        return `
+          <div class="card">
+            <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject} <span class="class-serial">#${serial}</span></div>
+            <div class="time bangla-font"><i class="fas fa-clock"></i> ${formatDateToBangla(getDateFromTimestamp(cls.timestamp))} ${getTimeFromTimestamp(cls.timestamp)}</div>
+            <div class="video-title bangla-font">${cls.title}</div>
+            <div class="card-badge bangla-font">${cls.type || 'ক্লাস'}</div>
+            ${cls.description ? `<p class="bangla-font">${cls.description}</p>` : ''}
+            ${cls.link ? `<a href="${cls.link}" class="btn bangla-font" target="_blank"><i class="fas fa-link"></i> দেখুন</a>` : '<button class="btn disabled bangla-font"><i class="fas fa-lock"></i> লকড</button>'}
+          </div>
+        `;
+      }).join('');
     }
 
     function setupSearch() {
