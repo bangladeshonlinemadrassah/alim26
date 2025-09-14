@@ -8,29 +8,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #1e3a8a; /* Deep sapphire blue */
-      --primary-dark: #172554; /* Darker sapphire for depth */
-      --secondary: #059669; /* Rich emerald green */
-      --accent: #7c3aed; /* Vibrant amethyst purple */
-      --danger: #dc2626; /* Bright red for errors */
-      --warning: #d97706; /* Amber for warnings */
-      --dark: #0a0f1f; /* Slightly lighter dark with metallic undertone */
-      --darker: #060914; /* Deepest background for contrast */
-      --light: #f8fafc; /* Crisp white for highlights */
-      --text: #e5e7eb; /* Silver-toned white for text */
-      --text-muted: #9ca3af; /* Softer gray for muted text */
-      --card-bg: rgba(20, 30, 60, 0.85); /* Enhanced frosted glass with deeper tone */
-      --card-border: rgba(255, 255, 255, 0.15); /* Slightly brighter border */
-      --glass: rgba(10, 15, 30, 0.75); /* Enhanced frosted glass */
-      --glass-border: rgba(255, 255, 255, 0.2); /* Brighter glass border */
-      --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #059669 50%, #facc15 100%); /* Sapphire to emerald with gold accent */
-      --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #db2777 50%, #f59e0b 100%); /* Amethyst to rose with amber */
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15); /* Softer shadow */
-      --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.25); /* Medium shadow for cards */
-      --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.25); /* Large shadow for elevation */
-      --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.3); /* Extra large for premium feel */
-      --radius: 16px; /* Smoother rounded corners */
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother, more natural transitions */
+      --primary: #1e3a8a;
+      --primary-dark: #172554;
+      --secondary: #059669;
+      --accent: #7c3aed;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --dark: #0a0f1f;
+      --darker: #060914;
+      --light: #f8fafc;
+      --text: #e5e7eb;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(20, 30, 60, 0.85);
+      --card-border: rgba(255, 255, 255, 0.15);
+      --glass: rgba(10, 15, 30, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #059669 50%, #facc15 100%);
+      --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #db2777 50%, #f59e0b 100%);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
+      --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.25);
+      --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.25);
+      --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.3);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --font-primary: 'Poppins', sans-serif;
       --font-bangla: 'Tiro Bangla', serif;
     }
@@ -896,21 +896,21 @@
       box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
     }
 
-    .card-badge {
+    .class-serial {
       position: absolute;
       top: 16px;
       right: 16px;
-      background: var(--gradient-primary);
-      color: white;
       font-size: 0.85rem;
       font-weight: 600;
       padding: 4px 10px;
       border-radius: 20px;
+      background: var(--gradient-primary);
+      color: white;
       box-shadow: var(--shadow-sm);
       transition: var(--transition);
     }
 
-    .card-badge:hover {
+    .class-serial:hover {
       transform: scale(1.05);
       box-shadow: var(--shadow-md);
     }
@@ -1158,13 +1158,6 @@
 
     #refresh-data-btn {
       margin-left: auto;
-    }
-
-    .class-serial {
-      font-size: 0.85rem;
-      color: var(--accent);
-      margin-left: auto;
-      font-weight: 600;
     }
   </style>
 </head>
@@ -1699,10 +1692,10 @@
         const serial = sortOrder === 'desc' ? (filteredClasses.length - index) : (index + 1);
         return `
           <div class="card">
-            <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject} <span class="class-serial">#${serial}</span></div>
+            <span class="class-serial bangla-font">#${serial}</span>
+            <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject}</div>
             <div class="time bangla-font"><i class="fas fa-clock"></i> ${formatDateToBangla(getDateFromTimestamp(cls.timestamp))} ${getTimeFromTimestamp(cls.timestamp)}</div>
             <div class="video-title bangla-font">${cls.title}</div>
-            <div class="card-badge bangla-font">${cls.type || 'ক্লাস'}</div>
             ${cls.description ? `<p class="bangla-font">${cls.description}</p>` : ''}
             ${cls.link ? `<a href="${cls.link}" class="btn bangla-font" target="_blank"><i class="fas fa-link"></i> দেখুন</a>` : '<button class="btn disabled bangla-font"><i class="fas fa-lock"></i> লকড</button>'}
           </div>
