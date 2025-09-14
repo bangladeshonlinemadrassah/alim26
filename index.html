@@ -1696,8 +1696,7 @@
       }
 
       classGrid.innerHTML = filteredClasses.map((cls, index) => {
-        // প্রতি সাবজেক্টে আলাদা সিরিয়াল: desc-এ নতুনতম ১, asc-এ পুরানোতম ১
-        const serial = sortOrder === 'desc' ? (index + 1) : (filteredClasses.length - index);
+        const serial = sortOrder === 'desc' ? (filteredClasses.length - index) : (index + 1);
         return `
           <div class="card">
             <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject} <span class="class-serial">#${serial}</span></div>
