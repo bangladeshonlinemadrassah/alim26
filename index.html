@@ -349,6 +349,12 @@
       font-size: 0.95rem;
     }
 
+    .card.highlight {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3), var(--shadow-xl);
+      transform: scale(1.02);
+    }
+
     .card::before {
       content: '';
       position: absolute;
@@ -1230,12 +1236,20 @@
         <h2 class="bangla-font">আজকের ক্লাস</h2>
       </div>
       <div id="today-classes">
+        <div class="filter-bar">
+          <select id="today-classes-sort">
+            <option value="today" class="bangla-font">আজকের ক্লাস</option>
+            <option value="week" class="bangla-font">সপ্তাহের ক্লাস</option>
+            <option value="month" class="bangla-font">মাসের ক্লাস</option>
+            <option value="all" class="bangla-font">সকল ক্লাস</option>
+          </select>
+        </div>
         <table class="today-classes-table">
           <thead>
             <tr>
               <th class="bangla-font">সাবজেক্ট</th>
-              <th class="bangla-font">ক্লাসের তথ্য</th>
-              <th class="bangla-font">সময়</th>
+              <th class="bangla-font">ক্লাসের শিরোনাম</th>
+              <th class="bangla-font">তারিখ</th>
             </tr>
           </thead>
           <tbody id="today-classes-body">
@@ -1361,6 +1375,7 @@
     function $all(sel, root = document) { return Array.from(root.querySelectorAll(sel)); }
 
     let currentSubject = null;
+    let highlightedClassTimestamp = null;
     const loginPage = $('#login-page');
     const mainPage = $('#main-page');
     const subjectPage = $('#subject-page');
@@ -1546,18 +1561,12 @@
       return `${year}-${month}-${day}`;
     }
 
-    const banglaMonths = [
-      'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
-      'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
-    ];
-
-    function formatDateToBangla(dateStr) {
+    function formatDateToEnglish(dateStr) {
       if (!dateStr) return '';
-
       try {
         if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
           const [year, month, day] = dateStr.split('-');
-          return `${parseInt(day)} ${banglaMonths[parseInt(month) - 1]} ${year}`;
+          return `${day}-${month}-${year.slice(2)}`;
         }
         return dateStr;
       } catch (error) {
@@ -1573,6 +1582,7 @@
       setupSearch();
       setupSort();
       setupBackButton();
+      setupTodayClassesSort();
       $('#refresh-data-btn').addEventListener('click', handleRefreshClick);
     }
 
@@ -1583,7 +1593,12 @@
       return fetch(API_URL)
         .then(response => response.json())
         .then(data => {
-          allClasses = data.rows || [];
+          allClasses = data.rows.map(row => ({
+            subject: row.subject || 'অন্যান্য',
+            title: row.title || 'শিরোনাম নেই',
+            timestamp: row.timestamp,
+            link: row.link || '#'
+          }));
           renderTodayClasses();
           showNotification(showNotificationFlag ? 'ডেটা সফলভাবে রিফ্রেশ করা হয়েছে!' : 'ডেটা সফলভাবে লোড হয়েছে!', false);
         })
@@ -1612,135 +1627,257 @@
       });
     }
 
-    function renderTodayClasses() {
+    function renderTodayClasses(sortOption = 'today') {
       const todayClassesBody = $('#today-classes-body');
       const today = getTodayDate();
-      const todayClasses = allClasses.filter(cls => getDateFromTimestamp(cls.timestamp) === today);
+      let filteredClasses = allClasses;
 
-      if (todayClasses.length === 0) {
-        todayClassesBody.innerHTML = `<tr><td colspan="3" class="empty-state bangla-font">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v6m0 4v10m-6-6h12"></path>
-          </svg>
-          আজকের জন্য কোনো ক্লাস নেই
-        </td></tr>`;
+      if (sortOption === 'today') {
+        filteredClasses = allClasses.filter(cls => getDateFromTimestamp(cls.timestamp) === today);
+      } else if (sortOption === 'week') {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        filteredClasses = allClasses.filter(cls => new Date(getDateFromTimestamp(cls.timestamp)) >= oneWeekAgo);
+      } else if (sortOption === 'month') {
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        filteredClasses = allClasses.filter(cls => new Date(getDateFromTimestamp(cls.timestamp)) >= oneMonthAgo);
+      } else if (sortOption === 'all') {
+        filteredClasses = allClasses;
+      }
+
+      if (filteredClasses.length === 0) {
+        todayClassesBody.innerHTML = `
+          <tr>
+            <td colspan="3" class="empty-state bangla-font">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+              কোনো ক্লাস পাওয়া যায়নি।
+            </td>
+          </tr>`;
         return;
       }
 
-      todayClassesBody.innerHTML = todayClasses.map(cls => `
-        <tr>
-          <td><span class="subject-badge bangla-font">${cls.subject}</span></td>
-          <td class="class-info bangla-font">${cls.title}</td>
-          <td class="bangla-font">${getTimeFromTimestamp(cls.timestamp)}</td>
-        </tr>
-      `).join('');
+      filteredClasses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+      todayClassesBody.innerHTML = filteredClasses.map(cls => {
+        const date = formatDateToEnglish(getDateFromTimestamp(cls.timestamp));
+        const time = getTimeFromTimestamp(cls.timestamp);
+        const displayDate = sortOption === 'today' ? `${date} ${time}` : date;
+        return `
+          <tr class="class-row" data-timestamp="${cls.timestamp}" data-subject="${cls.subject}">
+            <td><span class="subject-badge bangla-font">${cls.subject}</span></td>
+            <td class="class-info bangla-font">${cls.title || 'শিরোনাম নেই'}</td>
+            <td class="bangla-font">${displayDate}</td>
+          </tr>`;
+      }).join('');
+
+      $all('.class-row', todayClassesBody).forEach(row => {
+        row.addEventListener('click', () => {
+          const subject = row.dataset.subject;
+          const timestamp = row.dataset.timestamp;
+          currentSubject = subject;
+          highlightedClassTimestamp = timestamp;
+          showSubjectPage(subject);
+        });
+      });
+    }
+
+    function setupTodayClassesSort() {
+      const sortSelect = $('#today-classes-sort');
+      sortSelect.addEventListener('change', () => {
+        renderTodayClasses(sortSelect.value);
+      });
     }
 
     function setupSubjectLinks() {
-      $all('.subject-link').forEach(link => {
-        link.addEventListener('click', (e) => {
+      const subjectLinks = $all('.subject-link');
+      subjectLinks.forEach(link => {
+        link.addEventListener('click', e => {
           e.preventDefault();
           currentSubject = link.dataset.name;
-          mainPage.style.display = 'none';
-          subjectPage.style.display = 'block';
-          $('#subject-title').innerHTML = `<i class="fas fa-book"></i> ${currentSubject}`;
-          renderClasses();
+          highlightedClassTimestamp = null;
+          showSubjectPage(currentSubject);
           scrollToTop();
         });
       });
     }
 
-    function setupBackButton() {
-      $('.back-button').addEventListener('click', (e) => {
-        e.preventDefault();
-        subjectPage.style.display = 'none';
-        mainPage.style.display = 'block';
-        $('#search').value = '';
-        currentSubject = null;
-        scrollToTop();
-      });
+    function showSubjectPage(subject) {
+      mainPage.style.display = 'none';
+      subjectPage.style.display = 'block';
+      $('#subject-title').innerHTML = `<i class="fas fa-book"></i> <span class="bangla-font">${subject}</span>`;
+      renderClasses(subject);
     }
 
-    function renderClasses(searchTerm = '', sortOrder = 'desc') {
+    function renderClasses(subject) {
       const classGrid = $('#classGrid');
-      let filteredClasses = allClasses.filter(cls => cls.subject === currentSubject);
+      let filteredClasses = allClasses.filter(cls => cls.subject === subject);
 
-      if (searchTerm) {
-        filteredClasses = filteredClasses.filter(cls => 
-          cls.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (cls.description && cls.description.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-      }
-
-      filteredClasses.sort((a, b) => {
-        const dateA = new Date(a.timestamp || 0);
-        const dateB = new Date(b.timestamp || 0);
-        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
-      });
-
+      // Handle empty folders (no classes for the subject)
       if (filteredClasses.length === 0) {
-        classGrid.innerHTML = `<div class="empty-state bangla-font">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v6m0 4v10m-6-6h12"></path>
-          </svg>
-          কোনো ক্লাস পাওয়া যায়নি
-        </div>`;
+        classGrid.innerHTML = `
+          <div class="empty-state bangla-font">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            এই সাবজেক্টের জন্য কোনো ক্লাস পাওয়া যায়নি।
+          </div>`;
         return;
       }
 
-      classGrid.innerHTML = filteredClasses.map((cls, index) => {
-        const serial = sortOrder === 'desc' ? (filteredClasses.length - index) : (index + 1);
+      const searchInput = $('#search').value.toLowerCase();
+      const sortOption = $('#sort').value;
+
+      // Apply search filter
+      if (searchInput) {
+        filteredClasses = filteredClasses.filter(cls => 
+          cls.title.toLowerCase().includes(searchInput) || 
+          cls.subject.toLowerCase().includes(searchInput)
+        );
+      }
+
+      // Sort classes by timestamp (newest first by default)
+      filteredClasses.sort((a, b) => {
+        const dateA = new Date(a.timestamp || 0);
+        const dateB = new Date(b.timestamp || 0);
+        return dateB - dateA; // Newest first
+      });
+
+      // Assign serial numbers: oldest gets 1, newest gets highest
+      const classesWithSerial = filteredClasses.map((cls, index, arr) => ({
+        ...cls,
+        serial: arr.length - index // Oldest (last in array) gets 1, increments upwards
+      }));
+
+      // Apply sort option for display (default: newest first)
+      const displayClasses = sortOption === 'asc' 
+        ? classesWithSerial.slice().reverse() // Oldest first for ascending
+        : classesWithSerial; // Newest first for descending
+
+      if (displayClasses.length === 0) {
+        classGrid.innerHTML = `
+          <div class="empty-state bangla-font">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            এই সাবজেক্টের জন্য কোনো ক্লাস পাওয়া যায়নি।
+          </div>`;
+        return;
+      }
+
+      classGrid.innerHTML = displayClasses.map(cls => {
+        const date = formatDateToEnglish(getDateFromTimestamp(cls.timestamp));
+        const time = getTimeFromTimestamp(cls.timestamp);
+        const isHighlighted = highlightedClassTimestamp && cls.timestamp === highlightedClassTimestamp;
         return `
-          <div class="card">
-            <span class="class-serial bangla-font">#${serial}</span>
+          <div class="card ${isHighlighted ? 'highlight' : ''}">
+            <div class="class-serial bangla-font">ক্লাস ${cls.serial}</div>
             <div class="subject bangla-font"><i class="fas fa-book"></i> ${cls.subject}</div>
-            <div class="time bangla-font"><i class="fas fa-clock"></i> ${formatDateToBangla(getDateFromTimestamp(cls.timestamp))} ${getTimeFromTimestamp(cls.timestamp)}</div>
-            <div class="video-title bangla-font">${cls.title}</div>
-            ${cls.description ? `<p class="bangla-font">${cls.description}</p>` : ''}
-            ${cls.link ? `<a href="${cls.link}" class="btn bangla-font" target="_blank"><i class="fas fa-link"></i> দেখুন</a>` : '<button class="btn disabled bangla-font"><i class="fas fa-lock"></i> লকড</button>'}
-          </div>
-        `;
+            <div class="video-title bangla-font">${cls.title || 'শিরোনাম নেই'}</div>
+            <div class="time bangla-font"><i class="fas fa-clock"></i> ${date} ${time}</div>
+            <a href="${cls.link}" target="_blank" rel="noopener" class="btn bangla-font">
+              <i class="fas fa-play-circle"></i> ভিডিও দেখুন
+            </a>
+          </div>`;
       }).join('');
+
+      // Scroll to highlighted class if it exists
+      if (highlightedClassTimestamp) {
+        const highlightedCard = $all('.card.highlight', classGrid)[0];
+        if (highlightedCard) {
+          highlightedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
     }
 
     function setupSearch() {
-      $('#search-subjects').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const subjectLinks = $all('.subject-link');
+      const searchInput = $('#search-subjects');
+      const subjectLinks = $all('.subject-link');
+      searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const matchedSubjects = availableSubjects.filter(subject => 
+          subject.toLowerCase().includes(searchTerm)
+        );
 
         subjectLinks.forEach(link => {
-          const subjectName = link.dataset.name.toLowerCase();
-          link.style.display = subjectName.includes(searchTerm) || searchTerm === '' ? '' : 'none';
+          const subjectName = link.dataset.name;
+          const shouldShow = matchedSubjects.includes(subjectName);
+          link.style.display = shouldShow ? '' : 'none';
         });
+
+        const subjList = $('.subj-list');
+        if (matchedSubjects.length === 0) {
+          subjList.innerHTML = `
+            <div class="empty-state bangla-font">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              কোনো সাবজেক্ট পাওয়া যায়নি।
+            </div>`;
+        } else {
+          // Restore original subject list
+          subjList.innerHTML = availableSubjects.map(subject => `
+            <a class="pill subject-link" href="#" data-name="${subject}">
+              <span><i class="fas fa-book"></i> <span class="bangla-font">${subject}</span></span>
+              <span class="go bangla-font">খুলুন</span>
+            </a>
+          `).join('');
+          setupSubjectLinks();
+        }
       });
 
-      $('#search').addEventListener('input', (e) => {
-        const sortOrder = $('#sort').value;
-        renderClasses(e.target.value, sortOrder);
+      const classSearchInput = $('#search');
+      classSearchInput.addEventListener('input', () => {
+        renderClasses(currentSubject);
       });
     }
 
     function setupSort() {
-      $('#sort').addEventListener('change', (e) => {
-        const searchTerm = $('#search').value;
-        renderClasses(searchTerm, e.target.value);
+      const sortSelect = $('#sort');
+      sortSelect.addEventListener('change', () => {
+        renderClasses(currentSubject);
       });
     }
 
-    window.addEventListener('load', () => {
-      if (checkLoginExpiry()) {
-        loginPage.style.display = 'none';
-        mainPage.style.display = 'block';
-        if (getUserRole() === 'owner') {
-          showAddClassButton();
-        }
-        loadInitialData();
-      } else {
-        loginPage.style.display = 'flex';
-        mainPage.style.display = 'none';
+    function setupBackButton() {
+      const backButton = $('.back-button');
+      backButton.addEventListener('click', e => {
+        e.preventDefault();
         subjectPage.style.display = 'none';
-      }
-    });
+        mainPage.style.display = 'block';
+        $('#search-subjects').value = '';
+        const subjectLinks = $all('.subject-link');
+        subjectLinks.forEach(link => link.style.display = '');
+        scrollToTop();
+      });
+    }
+
+    // Check login status on page load
+    if (checkLoginExpiry()) {
+      loginPage.style.display = 'none';
+      mainPage.style.display = 'block';
+      showAddClassButton();
+      loadInitialData();
+    } else {
+      loginPage.style.display = 'flex';
+      mainPage.style.display = 'none';
+      subjectPage.style.display = 'none';
+    }
+
+    // Ensure Font Awesome is loaded
+    if (!window.FontAwesome) {
+      const script = document.createElement('script');
+      script.src = 'https://kit.fontawesome.com/a076d05399.js';
+      script.crossOrigin = 'anonymous';
+      script.onload = () => console.log('Font Awesome loaded');
+      document.head.appendChild(script);
+    }
   </script>
-</body>
-</html>
+  </body>
+  </html>
