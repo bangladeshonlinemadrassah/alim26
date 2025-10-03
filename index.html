@@ -8,27 +8,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #1e3a8a;
-      --primary-dark: #172554;
-      --secondary: #059669;
-      --accent: #7c3aed;
-      --danger: #dc2626;
-      --warning: #d97706;
-      --dark: #0a0f1f;
-      --darker: #060914;
-      --light: #f8fafc;
-      --text: #e5e7eb;
-      --text-muted: #9ca3af;
-      --card-bg: rgba(20, 30, 60, 0.85);
-      --card-border: rgba(255, 255, 255, 0.15);
-      --glass: rgba(10, 15, 30, 0.75);
-      --glass-border: rgba(255, 255, 255, 0.2);
-      --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #059669 50%, #facc15 100%);
-      --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #db2777 50%, #f59e0b 100%);
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
-      --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.25);
-      --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.25);
-      --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.3);
+      --primary: #0ea5e9; /* ভাইব্রেন্ট সায়ান নীল - চকচকে প্রাইমারি */
+      --primary-dark: #0369a1; /* গাঢ় সায়ান - ডেপ্থের জন্য */
+      --secondary: #22c55e; /* ভাইব্রেন্ট সবুজ - এনার্জেটিক */
+      --accent: #a855f7; /* ভাইব্রেন্ট পার্পল - অ্যাকসেন্টের জন্য */
+      --danger: #ef4444; /* চকচকে লাল - এররের জন্য */
+      --warning: #eab308; /* ভাইব্রেন্ট হলুদ - ওয়ার্নিং */
+      --dark: #020617; /* গাঢ় কালো - ব্যাকগ্রাউন্ড */
+      --darker: #000000; /* আরো গাঢ় - ডেপ্থ */
+      --light: #f1f5f9; /* হালকা সাদা - লাইট এলিমেন্ট */
+      --text: #f1f5f9; /* সাদা টেক্সট - ক্লিয়ার */
+      --text-muted: #94a3b8; /* হালকা ধূসর - মিউটেড */
+      --card-bg: rgba(15, 23, 42, 0.85); /* চকচকে গ্লাসি কার্ড - সামান্য নীল টিন্ট */
+      --card-border: rgba(255, 255, 255, 0.2); /* হালকা সাদা বর্ডার */
+      --glass: rgba(2, 6, 23, 0.75); /* গ্লাস ইফেক্ট - চকচকে */
+      --glass-border: rgba(255, 255, 255, 0.25); /* সামান্য চকচকে বর্ডার */
+      --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #22c55e 50%, #fde047 100%); /* চকচকে নীল-সবুজ-সোনালি গ্রেডিয়েন্ট */
+      --gradient-secondary: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #f97316 100%); /* পার্পল-পিঙ্ক-কমলা - ভাইব্রেন্ট */
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2); /* সামান্য শ্যাডো */
+      --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.35);
+      --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.4);
       --radius: 16px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       --font-primary: 'Poppins', sans-serif;
@@ -76,7 +76,7 @@
       top: 0;
       z-index: 1000;
       backdrop-filter: blur(20px) saturate(180%);
-      background: rgba(10, 14, 26, 0.9);
+      background: rgba(2, 6, 23, 0.9); /* চকচকে গ্লাসি হেডার */
       border-bottom: 1px solid var(--card-border);
       box-shadow: var(--shadow-md);
     }
@@ -145,7 +145,7 @@
 
     .searchbar input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2); /* চকচকে গ্লো ফোকাস */
     }
 
     .searchbar i {
@@ -181,7 +181,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 10%, transparent 40%);
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 10%, transparent 40%); /* চকচকে গ্লো গ্রেডিয়েন্ট */
       animation: rotateGradient 20s linear infinite;
       z-index: -1;
     }
@@ -199,7 +199,7 @@
       background-clip: text;
       color: transparent;
       font-weight: 800;
-      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     }
 
     .hero p {
@@ -239,13 +239,13 @@
       right: 0;
       height: 6px;
       background: var(--gradient-primary);
-      opacity: 0.8;
+      opacity: 0.9;
       transition: var(--transition);
     }
 
     .stat-card:hover::before {
       height: 100%;
-      opacity: 0.1;
+      opacity: 0.15; /* সল্প গ্লো */
     }
 
     .stat-card:hover {
@@ -262,7 +262,7 @@
       color: transparent;
       margin-bottom: 12px;
       line-height: 1;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
 
     .stat-label {
@@ -304,7 +304,7 @@
     }
 
     .today-classes-table tr:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.1); /* চকচকে হোভার */
       transform: translateX(4px);
     }
 
@@ -351,7 +351,7 @@
 
     .card.highlight {
       border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.3), var(--shadow-xl);
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.3), var(--shadow-xl); /* চকচকে হাইলাইট গ্লো */
       transform: scale(1.02);
     }
 
@@ -363,13 +363,13 @@
       right: 0;
       height: 6px;
       background: var(--gradient-primary);
-      opacity: 0.9;
+      opacity: 0.95;
       transition: var(--transition);
     }
 
     .card:hover::before {
       height: 100%;
-      opacity: 0.2;
+      opacity: 0.25; /* সল্প গ্লো হোভার */
     }
 
     .card:hover {
@@ -381,7 +381,7 @@
     .subject {
       font-weight: 700;
       margin-bottom: 12px;
-      color: #7ecbff;
+      color: #7dd3fc; /* হালকা সায়ান - চকচকে */
       font-size: 1.1rem;
       display: flex;
       align-items: center;
@@ -422,7 +422,7 @@
       left: -100%;
       width: 200%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent); /* চকচকে শাইন ইফেক্ট */
       transition: left 0.5s ease;
     }
 
@@ -513,8 +513,8 @@
       margin: 32px auto 16px;
       padding: 24px;
       border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.03)); /* চকচকে গ্রেডিয়েন্ট */
+      border: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -541,7 +541,7 @@
       font-weight: 800;
       margin-top: 8px;
       margin-bottom: 4px;
-      background: linear-gradient(90deg, #8b5cf6, #ec4899, #10b981);
+      background: linear-gradient(90deg, #a855f7, #ec4899, #22c55e); /* ভাইব্রেন্ট গ্রেডিয়েন্ট */
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -551,7 +551,7 @@
 
     .owner-sub {
       font-size: 0.85rem;
-      color: rgba(226,232,240,0.75);
+      color: rgba(226,232,240,0.8);
       margin-top: 0;
       margin-bottom: 8px;
       text-transform: lowercase;
@@ -587,9 +587,9 @@
       margin: 16px auto 64px;
       padding: 20px 24px;
       border-radius: 12px;
-      background: rgba(15,23,42,0.7);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: rgba(226,232,240,0.8);
+      background: rgba(15,23,42,0.75); /* চকচকে ফুটার */
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(226,232,240,0.85);
       text-align: center;
       font-size: 0.85rem;
       box-shadow: var(--shadow-md);
@@ -634,7 +634,7 @@
     }
 
     .back-button:hover {
-      background: rgba(37, 99, 235, 0.15);
+      background: rgba(14, 165, 233, 0.2); /* চকচকে হোভার */
       transform: translateX(-4px);
       border-color: var(--primary);
       box-shadow: var(--shadow-md);
@@ -667,7 +667,7 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
 
     .empty-state {
@@ -682,14 +682,14 @@
       width: 80px;
       height: 80px;
       margin-bottom: 16px;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     .loading {
       display: inline-block;
       width: 24px;
       height: 24px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
+      border: 3px solid rgba(255, 255, 255, 0.35);
       border-radius: 50%;
       border-top-color: var(--primary);
       animation: spin 0.8s linear infinite;
@@ -834,9 +834,9 @@
       border-radius: inherit;
       background: var(--gradient-primary);
       background-size: 600% 600%;
-      animation: gradientGlow 6s ease infinite;
-      filter: blur(16px);
-      opacity: 0.4;
+      animation: gradientGlow 8s ease infinite; /* সল্প অ্যানিমেশন স্পিড */
+      filter: blur(18px);
+      opacity: 0.45; /* সল্প গ্লো */
     }
 
     @keyframes gradientGlow {
@@ -899,7 +899,7 @@
 
     .filter-bar input:focus, .filter-bar select:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2);
     }
 
     .class-serial {
@@ -970,7 +970,7 @@
       background-clip: text;
       color: transparent;
       font-weight: 800;
-      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     }
 
     .welcome-message p {
@@ -1008,7 +1008,7 @@
 
     .form-group input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2);
     }
 
     .login-btn {
@@ -1076,7 +1076,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.8); /* গাঢ় ওভারলে */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1114,7 +1114,7 @@
       background-clip: text;
       color: transparent;
       margin-bottom: 12px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
 
     .modal-body {
@@ -1152,7 +1152,7 @@
       .login-container {
         padding: 24px;
       }
-      
+
       .welcome-message h1 {
         font-size: 1.6rem;
       }
@@ -1435,11 +1435,11 @@
     function checkLoginExpiry() {
       const expiryTime = localStorage.getItem(LOGIN_EXPIRY_KEY);
       const isLoggedIn = localStorage.getItem(IS_LOGGED_IN_KEY);
-      
+
       if (!expiryTime || !isLoggedIn) {
         return false;
       }
-      
+
       const now = new Date().getTime();
       return now < parseInt(expiryTime);
     }
@@ -1479,7 +1479,7 @@
     function checkPassword() {
       const password = $('#password').value;
       const errorElement = $('#error-message');
-      
+
       if (password === 'USERALIM26') {
         setLoginExpiry('user');
         loginPage.style.display = 'none';
